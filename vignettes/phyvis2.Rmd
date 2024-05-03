@@ -12,10 +12,10 @@ library{phyvis2}
 
 ```
 
-### The following code imports the Ostrich_dna.rda dataset bundled in the {phyvis2} package as a DNAbin (a filetype used in most {ape} functions).
+### The following code imports the Ostrich data bundled in the {phyvis2} package as a DNAbin (a filetype used in most {ape} functions).
 
 ```{r}
-Ostrich_dna <- read.dna("https://raw.githubusercontent.com/allyboville3/Collaborative-Data-Science-Project/main/Aves%20FASTA%20Files/Struthio_camelus.fasta", format = "fasta")
+Ostrich_dna <- read.dna(Ostrich_dna, format = "fasta")
 
 # This creates a specific structure called a DNAbin in {ape}. We can see this by checking the class.
 
