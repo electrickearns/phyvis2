@@ -5,6 +5,7 @@
 #' @import ape
 #' @export
 #' @examples
+#' # require (ape)
 #' # library(phyvis2)
 #' # Ostrich_dna <- load.rda("Ostrich_dna.rda")
 #' # DNA.vis(Ostrich_dna)
