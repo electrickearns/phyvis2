@@ -7,13 +7,311 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r}
+
+
 ```
 
-```{r setup}
-library(phyvis2)
+### The following code imports the Ostrich_dna.rda dataset bundled in the {phyvis2} package as a DNAbin (a filetype used in most {ape} functions).
+
+```{r}
+Ostrich_dna <- read.dna("https://raw.githubusercontent.com/allyboville3/Collaborative-Data-Science-Project/main/Aves%20FASTA%20Files/Struthio_camelus.fasta", format = "fasta")
+
+# This creates a specific structure called a DNAbin in {ape}. We can see this by checking the class.
+
+class (Ostrich_dna)
+```
+
+### Preliminary data/looking
+
+The following code uses {ape} to gather further information: base.freq calculates the frequency of the four nucleotides in the FASTA file. This can be useful for verifying normal expected ranges. 
+
+```{r}
+base.freq(Ostrich_dna)
+
+```
+
+## Trimming and Preparing Data
+
+This is another way to import data. This code imports the data as a different file type, Biostrings, and is under the {Biostrings} package. 
+
+```{r}
+MySeq <- readDNAStringSet("https://raw.githubusercontent.com/allyboville3/Collaborative-Data-Science-Project/main/Aves_cytB.fas")
+```
+
+Using the `msa()` function in the {msa} package aligns all samples to the same length by the 
+ClustalW algorithm and stores them as a DNAStringSet object.
+
+```{r}
+msa(MySeq)
+```
+
+
+Let's look at it!
+
+```{r}
+print(MySeq)
+```
+
+Using the `as.DNAbin()` function from {ape} allows us to store these multiple alignments as a DNAbin object. We need a DNAbin object going forward to use many functions, including those from {ape}.
+
+```{r}
+SeqBin <- as.DNAbin(MySeq)
+```
+
+##Trim ends is useful when one needs to trim their data. In out case, our data was already trimmed, so this function was not needed in this case. One needs either the quality of the code or the primer information to trim ends of DNA. 
+
+```{r}
+SeqBin <- trimEnds(as.matrix(SeqBin))
+```
+
+
+## Phylogenetics
+
+Starting Work
+
+```{r}
+nbinmat<-as.matrix(labels(SeqBin)) #extraction of the sample names
+class(SeqBin) #just checking to make sure we have the right one.
+dnbin<-dist.dna(SeqBin, model = "K80") #computing distance by ape package with K80 model derived by Kimura (1980)
+tree<-nj(dnbin) # this function from {ape} estimates the neighbor-joining tree estimation. It uses Saitou and Nei (1987)
+```
+
+The following code plots a phylogenetic tree using the `msaplot()` command from {ggtree} along with various aesthetics from {ggplot2}
+
+```{r}
+#colors can be changes at will, of course!
+ggt <- ggtree(tree, cex = 0.8, aes(color = branch.length)) +
+  scale_color_continuous(high = "skyblue",low = "black") + #this colors the scale of the branches
+  geom_tiplab(align = TRUE, size = 5) + #changes size and alignment of branches
+  theme(legend.position = "right") + #positions legend
+  geom_treescale(y = -5, color = "red", fontsize = 3) #adds scale for tree at bottom
+  msaplot(ggt, SeqBin, offset = 0.25, width = 0.75, height = 0.5) #Offset, width, and height adjusts the sequence illustration to right of the tree
+  color = c(rep("rosybrown", 1), rep("sienna1", 1),
+            rep("lightgoldenrod1", 1), rep("lightskyblue1", 1), rep("palegreen", 1)) #changes color of bases. May need to add additional colors if other unknown variables exist (W,-, etc) or remove color if sequence is complete
+```
+
+There are various ways to represent trees. Trees can also portray different unformation such as having a rooted or unrooted tree.
+
+```{r}
+#Second tree, this one an unrooted phylogeny
+ggtree(tree, aes(color = branch.length)) + geom_tiplab(size = 7) + layout_inward_circular()
+#function `layout_inward_circular changes the shape
+```
+
+## More analysis
+
+Calculating Genetic Distance demonstrates that our assumption that the unknown is most closely related to *Dinornis giganteus* is correct. 
+
+```{r}
+dist.gene((as.matrix(SeqBin)), method = "pairwise", pairwise.deletion = FALSE,
+          variance = FALSE)
+```
+
+Is it monophyletic?
+With the following function we can get a confirmation if two species are monophyletic or not.
+
+```{r}
+is.monophyletic(tree, c("Dinornis giganteus", "Unknown Species"))
+is.monophyletic(tree, c("Dinornis giganteus", "Struthio camelus"))
+
+```
+
+
+## Tree Rooting
+The following codes plots the tree as rooted or unrooted and also include labels.
+
+```{r}
+# plot tree
+plot.phylo(tree, main="Aves (Palaeognathae) Phylogenetic Tree", 
+            type = "unrooted", 
+            use.edge.length = F)
+
+# add label
+mtext(text = "Unrooted Tree - No branch Lengths")
+```
+
+
+```{r}
+# plot tree
+plot.phylo(tree, main= "Aves (Palaeognathae) Phylogenetic Tree", 
+            use.edge.length = F)
+
+# add label
+mtext(text = "Rooted Tree - No branch Lengths")
+```
+
+
+```{r}
+# plot tree
+plot.phylo(tree, main="Aves (Palaeognathae) Phylogenetic Tree", 
+            use.edge.length = T)
+
+# add label
+mtext(text = "Rooted Tree - With Branch Lengths")
+```
+
+
+
+## Haplotypes and Heatmaps
+This code uses the data provided from the original paper.
+This was done because the above data covered multiple species and was not appropriate for haplotype studies. 
+
+```{r}
+d <- read.dna("https://raw.githubusercontent.com/electrickearns/ada-2024-notes/main/pone.0243927.s002.fas", format = "fas")
+class(d)
+```
+
+
+```{r}
+an<-as.alignment(d)  #converting DNAbin to alignment format
+nm<-as.matrix(an)       #converting alignment to matrix
+bin2 <- NULL
+for (i in 1:nrow(nm)) {
+  bin2[i] <- paste(nm[i, ], collapse="")
+}
+
+bin2 <- toupper(bin2) #converts all letters to uppercase
+bin3 <- unique(bin2) #gives only unique sequences from all sequences
+bin3#that is, it gives complete sequences of haplotypes (20x373).
+hfreq <- NULL
+for (i in 1:length(bin3)) {
+  hcount = 0
+  s3 <- bin3[i]
+  for (j in 1:length(bin2)) {
+    s2 <- bin2[j]
+    if (s3 == s2) {
+      hcount <- (hcount + 1) #counts the number of individuals with the same haplotype sequence. 
+      #print(paste(i, "yes", hcount))
+    }
+    #print(s2)
+  }
+  hname<-(paste("H",i, sep =""))
+  hfreq[i] <- hcount
+  #print(paste(hname, hcount, collapse = ""))
+}   #haplotype frequency in the all samples
+
+len <- nchar(bin3[1]) #assume all have same length!!!
+cnt <- 1
+bin4 = list()
+for (j in 1:len) {
+  same <- TRUE
+  first <- substr(bin3[1], j, j)
+  for (i in 2:length(bin3)) {
+    ch1 <- substr(bin3[i], j, j)
+    if (first != ch1) {
+      str <- paste(j, first, ch1)
+      print(str)
+      same <- FALSE
+      break
+    }
+  }
+  if (!same) {
+    ss <- NULL
+    for (i in 1:length(bin3)) {
+      ss <- paste(ss, substr(bin3[i], j, j), sep="")
+    }
+    bin4[cnt] <- ss
+    cnt <- cnt + 1
+  }
+}#it gives the mutation points and the nucleotide substitutions
+
+len <- nchar(bin3[1]) #assume all have same length!!!
+cnt <- 1
+bin5 = list() 
+for (j in 1:len) { #scan all columnns and if all elements are the same do not copy
+  same <- TRUE
+  first <- substr(bin3[1], j, j)
+  scol <- first
+  for (i in 2:length(bin3)) {
+    ch1 <- substr(bin3[i], j, j)
+    scol <- paste(scol, ch1, sep="")
+    if (first != ch1) {
+      str <- paste(j, first, ch1)
+      #print(str)
+      same <- FALSE
+      #break
+    }
+  }
+  if (!same) {
+    scol <- paste("V_", cnt, " ", scol, sep="")
+    ss <- NULL
+    for (i in 1:length(bin3)) {
+      ss <- paste(ss, substr(bin3[i], j, j), sep="")
+    } 
+    bin5[cnt] <- ss
+    cnt <- cnt + 1
+  }
+}
+
+bin6 <- as.matrix(bin5)
+mat6 = matrix(nrow=nrow(bin6), ncol=nchar(bin6[1]))
+for (i in 1:nrow(mat6)) {
+  s <- as.vector(strsplit(as.character(bin5[i]), ""))
+  for (j in 1:ncol(mat6)) {
+    mat6[i, j] <- as.character(s[[1]][j])
+  }
+}
+mat7 <- t(mat6) #sequences of haplotypes and variable sites matrix (20x41)
+write.table(mat7,file="mat7.txt", quote=FALSE, sep="\t")
+hname<-paste("H", 1:nrow(mat7), sep = "")
+rownames(mat7)=hname
+write.table(mat7,file="mat7.txt", quote=FALSE, sep="\t") 
+
+str4 <- NULL
+str4[1] <- paste(mat7[1, ], collapse="")
+for (i in 2:nrow(mat7)) {
+  tmp <- NULL
+  for (j in 1:ncol(mat7)) {
+    chr = "."
+    if(mat7[i, j] != mat7[1, j]) chr = mat7[i, j]
+    tmp <- paste(tmp, chr, sep="")
+  }
+  str4[i] <- paste(tmp, collapse="")
+}
+nchar(str4[1]) #confirmation of number of variable sites
+mstr4<-as.matrix(str4)
+rownames(mstr4)<-hname
+colnames(mstr4)<-paste("sequences length","(", ncol(mat7), "base pairs", ")")
+pct<-round((as.matrix(hfreq)*100/colSums(as.matrix(hfreq))), 2)
+colnames(pct)<-c("pct")
+cmstr4<-as.data.frame(cbind(mstr4, hfreq, pct))
+cmstr4
+write.table(cmstr4,file="cmstr4.txt", quote=FALSE, sep="\t") 
+```
+
+
+The followinf code creates the heatmap!
+
+```{r}
+bin2 <- NULL
+for (i in 1:nrow(nm)) {
+  bin2[i] <- paste(nm[i, ], collapse="")
+}
+
+bin2 <- toupper(bin2)
+bin3 <- unique(bin2)
+comat = matrix(nrow=length(bin3), ncol=length(bin3))
+for (i in 1:length(bin3)) { 
+  si <- bin3[i]
+  for (j in 1:length(bin3)) { 
+    sj <- bin3[j]
+    difcnt = 0
+    s1 = as.vector(strsplit(as.character(si), ""))
+    s2 = as.vector(strsplit(as.character(sj), ""))
+    for (k in 1:length(s1[[1]])) {
+      if (s1[[1]][k] != s2[[1]][k]) {
+        difcnt = difcnt + 1
+      }
+      comat[i, j] = difcnt
+      #print(paste(i, " ", j, " ", difcnt))
+    }
+  }
+}
+comat	#is Hamming distance matrix
+colnames(comat)<-paste("H", 1:nrow(comat), sep = "")
+rownames(comat)<-paste("H", 1:nrow(comat), sep = "")
+heatmap(comat,scale="none",col=heat.colors(100),keep.dendro=TRUE, symm=TRUE) #stats package
+
+comat
 ```

@@ -15,7 +15,7 @@ Author: c(
     family = "Valdes",
     role= c("author", "creator"),
     email = "jvaldes@utexas.edu"))
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: The package maintainer <akearns@utexas.edu>
 Description: The fucntion in this package allows you to explore different areas of phylogenetic analyses with the crucial component of visualization. This function will plot the phylogenetic tree using ggtree(). Tip labels, a tree scale, and a legend have been added. The branch lengths have been colored in coral and black.
 Depends: R (>= 3.5)
 License: GPL-3
