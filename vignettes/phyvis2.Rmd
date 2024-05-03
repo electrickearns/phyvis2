@@ -6,6 +6,15 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+Phyvis2 is a package designed to streamline ways to visualize genetic sequences. It compiles functions from both ggtree and ape and utilizes formatting from ggplot2 to create two different visual avenues to analyze genetic data and create phylogenetic trees. 
+
+For additional tools to visualize data using the ggtree package please use this book! https://yulab-smu.top/treedata-book/index.html
+
+This pacakge is composed of two functions: 
+    The first, tree.vis, take a fasta file of multiple genetic sequences and produces a phylogenetic tree with highlight nucleotide differences and tree coloration by branch length. 
+    The second, DNA.vis, takes a fasta file of a single sequence and produces the frequencies of each nucleotide, the GC count, the lenth of the sequences in addition to a plot showing the relative  
+
 ## Starting Steps: Reading in DNA Code and Preliminary Data
 
 ### Load in Necessary Packages
@@ -31,7 +40,7 @@ if (InstallPackages) {
 ```
     
 ```{r}
-library{phyvis2}
+#library(phyvis2)
 library(adegenet)
 library(ape)
 library(Biostrings)
@@ -47,11 +56,11 @@ library (spider)
 ### The following code imports the Ostrich data bundled in the {phyvis2} package as a DNAbin (a filetype used in most {ape} functions).
 
 ```{r}
-Ostrich_dna <- read.dna(Ostrich_dna, format = "fasta")
+#Ostrich_dna <- read.dna(Ostrich_dna, format = "fasta")
 
 # This creates a specific structure called a DNAbin in {ape}. We can see this by checking the class.
 
-class (Ostrich_dna)
+#class (Ostrich_dna)
 ```
 
 ### Preliminary data/looking
@@ -59,7 +68,7 @@ class (Ostrich_dna)
 The following code uses {ape} to gather further information: base.freq calculates the frequency of the four nucleotides in the FASTA file. This can be useful for verifying normal expected ranges. 
 
 ```{r}
-base.freq(Ostrich_dna)
+#base.freq(Ostrich_dna)
 
 ```
 

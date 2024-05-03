@@ -11,8 +11,8 @@ The fucntion in this package allows you to explore different areas of phylogenet
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/allyboville3/phyvis}
-  \item Report bugs at \url{https://github.com/allyboville3/phyvis/issues}
+  \item \url{https://github.com/electrickearns/phyvis2.git}
+  \item Report bugs at \url{https://github.com/electrickearns/phyvis2/issues}
 }
 
 }

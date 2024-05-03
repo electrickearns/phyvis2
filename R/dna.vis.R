@@ -19,7 +19,7 @@ DNA.vis <- function(x) {
       GC.content(x), #{ape}
       length (x))
     print(df)
-    print(image.DNAbin(x))
+    #print(image.DNAbin(x,cex.lab=.5))
     trios <- as.data.frame(seqinr::count(x, 3)) # {seqinr}
     ggplot(data=trios, aes(x=Var1, y=Freq, fill=Var1)) + geom_col() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   }
