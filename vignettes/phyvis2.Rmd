@@ -13,7 +13,7 @@ For additional tools to visualize data using the ggtree package please use this 
 
 This pacakge is composed of two functions: 
     The first, tree.vis, take a fasta file of multiple genetic sequences and produces a phylogenetic tree with highlight nucleotide differences and tree coloration by branch length. 
-    The second, DNA.vis, takes a fasta file of a single sequence and produces the frequencies of each nucleotide, the GC count, the lenth of the sequences in addition to a plot showing the relative  
+    The second, DNA.vis, takes a fasta file of a single sequence and produces the frequencies of each nucleotide, the GC count, the length of the sequences in addition to a plot showing the the frequency of codons (sets of three nucleotides). 
 
 ## Starting Steps: Reading in DNA Code and Preliminary Data
 
