@@ -6,9 +6,41 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+## Starting Steps: Reading in DNA Code and Preliminary Data
 
+### Load in Necessary Packages
+```{r}
+InstallPackages = FALSE
+if (InstallPackages) {
+    if (!requireNamespace("BiocManager", quietly=TRUE)) 
+        install.packages("BiocManager")
+    BiocManager::install("msa")
+    install.packages("adegenet")
+    install.packages("ape")
+    BiocManager::install("Biostrings")
+    BiocManager::install("ggtree")
+    install.packages("ggplot2")
+    install.packages("ips")
+    install.packages("bios2mds")
+    install.packages("haplotypes")
+    install.packages("pegas")
+    install.packages("phytools")
+    install.packages("stats")
+        install.packages("treeio") }
+    
+```
+    
 ```{r}
 library{phyvis2}
+library(adegenet)
+library(ape)
+library(Biostrings)
+library(ggtree)
+library(ggplot2)
+library(stats)
+library(ips)
+library(msa)
+library (spider)
 
 ```
 
