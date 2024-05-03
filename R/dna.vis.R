@@ -4,6 +4,12 @@
 #' @keywords - DNA
 #' @import ape
 #' @export
+#' @examples
+#' # library(phyvis2)
+#' # Ostrich_dna <- load.rda("Ostrich_dna.rda")
+#' # DNA.vis(Ostrich_dna)
+#'
+#'
 
 DNA.vis <- function(x) {
   if (class(x)=="DNAbin")

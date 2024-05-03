@@ -12,5 +12,12 @@ DNA.vis(x)
 \description{
 This function creates a summary for a single fasta file that includes frequencies of the four DNA bases, GC count, length of sequences, and two visualizations (one showing a colored image of the base pairs and the second showing relative counts of different codons or sets of three base pairs).
 }
+\examples{
+# library(phyvis2)
+# Ostrich_dna <- load.rda("Ostrich_dna.rda")
+# DNA.vis(Ostrich_dna)
+
+
+}
 \keyword{-}
 \keyword{DNA}
