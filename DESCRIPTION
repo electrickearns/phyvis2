@@ -32,5 +32,5 @@ VignetteBuilder: knitr
 Suggests: 
     knitr,
     rmarkdown
-URL: https://github.com/allyboville3/phyvis
-BugReports: https://github.com/allyboville3/phyvis/issues
+URL: https://github.com/electrickearns/phyvis2.git
+BugReports: https://github.com/electrickearns/phyvis2/issues
