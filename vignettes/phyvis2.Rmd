@@ -122,7 +122,7 @@ Using the `as.DNAbin()` function from {ape} allows us to store these multiple al
 SeqBin <- as.DNAbin(MySeq)
 ```
 
-##Trim ends is useful when one needs to trim their data. In out case, our data was already trimmed, so this function was not needed in this case. One needs either the quality of the code or the primer information to trim ends of DNA. 
+##Trim ends is useful when one needs to trim their data. In our case, our data was already trimmed, so this function was not needed in this case. One needs either the quality of the code or the primer information to trim ends of DNA. 
 
 ```{r}
 SeqBin <- trimEnds(as.matrix(SeqBin))
@@ -131,7 +131,7 @@ SeqBin <- trimEnds(as.matrix(SeqBin))
 
 ## tree.vis 
 
-Starting Work
+Starting Work including: the extraction of sample names and the computation of distances within the tree.
 
 ```{r}
 nbinmat<-as.matrix(labels(SeqBin)) #extraction of the sample names
@@ -143,7 +143,7 @@ tree<-nj(dnbin) # this function from {ape} estimates the neighbor-joining tree e
 The following code plots a phylogenetic tree using the `msaplot()` command from {ggtree} along with various aesthetics from {ggplot2}
 
 ```{r}
-#colors can be changes at will, of course!
+#colors can be changed at will, of course!
 ggt <- ggtree(tree, cex = 0.8, aes(color = branch.length)) +
   scale_color_continuous(high = "skyblue",low = "black") + #this colors the scale of the branches
   geom_tiplab(align = TRUE, size = 5) + #changes size and alignment of branches
@@ -154,7 +154,7 @@ ggt <- ggtree(tree, cex = 0.8, aes(color = branch.length)) +
             rep("lightgoldenrod1", 1), rep("lightskyblue1", 1), rep("palegreen", 1)) #changes color of bases. May need to add additional colors if other unknown variables exist (W,-, etc) or remove color if sequence is complete
 ```
 
-There are various ways to represent trees. Trees can also portray different unformation such as having a rooted or unrooted tree.
+There are various ways to represent trees. Trees can also portray different information such as having a rooted or unrooted tree.
 
 ```{r}
 #Second tree, this one an unrooted phylogeny
@@ -172,6 +172,8 @@ dist.gene((as.matrix(SeqBin)), method = "pairwise", pairwise.deletion = FALSE,
 ```
 
 Is it monophyletic?
+(As a reminder monophyletic species share a single common ancestor.)
+
 With the following function we can get a confirmation if two species are monophyletic or not.
 
 ```{r}
@@ -344,7 +346,7 @@ write.table(cmstr4,file="cmstr4.txt", quote=FALSE, sep="\t")
 ```
 
 
-The followinf code creates the heatmap!
+The following code creates the heatmap!
 
 ```{r}
 bin2 <- NULL
