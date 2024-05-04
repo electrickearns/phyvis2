@@ -1,5 +1,5 @@
 #' @title tree.vis
-#' @description This function creates a simple phylogenetic tree, complete with branch length. It relies on the K80 model of distance
+#' @description This function creates a simple phylogenetic tree, complete with branch length. It relies on the K80 model of distance.
 #' @param x - data
 #' @keywords - DNA
 #' @import ggtree
