@@ -18,6 +18,7 @@ This pacakge is composed of two functions:
 ## Starting Steps: Reading in DNA Code and Preliminary Data
 
 ### Load in Necessary Packages
+
 ```{r}
 InstallPackages = FALSE
 if (InstallPackages) {
@@ -163,7 +164,7 @@ ggtree(tree, aes(color = branch.length)) + geom_tiplab(size = 7) + layout_inward
 
 ## More analysis
 
-Calculating Genetic Distance demonstrates that our assumption that the unknown is most closely related to *Dinornis giganteus* is correct. 
+Calculating Genetic Distance demonstrates that our assumption that the unknown is most closely related to *Dinornis giganteus* is correct. (Genetic Distance refers to the number of mutations of evolutionary changes between species.)
 
 ```{r}
 dist.gene((as.matrix(SeqBin)), method = "pairwise", pairwise.deletion = FALSE,
