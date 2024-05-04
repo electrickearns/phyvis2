@@ -63,16 +63,37 @@ library (spider)
 #class (Ostrich_dna)
 ```
 
-### Preliminary data/looking
+## Using dna.vis to do preliminary data analysis. 
 
-The following code uses {ape} to gather further information: base.freq calculates the frequency of the four nucleotides in the FASTA file. This can be useful for verifying normal expected ranges. 
+The following code uses {ape} and {ggplot} to gather further information. This function works off of a single sequence in one FASTA file in the format DNAbin. Multiple sequences or samples will cause an error in the graphing function.  
+
+The first part of the function creates a data frame with the following information:
+    - Labels for the sequence (including NCBI accession number if included)
+    - base frequency- useful in verifying sequence or other statistics at a glance
+    - GC content- provides content of G/C in sequence
+    - Length- provides count of nucleotides in sequence
+    
 
 ```{r}
-#base.freq(Ostrich_dna)
-
+DNA.vis <- function(x) {
+  if (class(x)=="DNAbin")
+  {
+    df <- data.frame(
+      labels.DNAbin(Ostrich_dna),
+      base.freq(Ostrich_dna), #{ape}
+      GC.content(Ostrich_dna), #{ape}
+      length (Ostrich_dna))
+    print(df)
+    #print(image.DNAbin(x,cex.lab=.5))
+    trios <- as.data.frame(seqinr::count(x, 3)) # {seqinr}
+    ggplot(data=trios, aes(x=Var1, y=Freq, fill=Var1)) + geom_col() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  }
+  else {
+    print("Please use file in DNAbin format")
+  }}
 ```
 
-## Trimming and Preparing Data
+## Trimming and Preparing Data for tree.vis
 
 This is another way to import data. This code imports the data as a different file type, Biostrings, and is under the {Biostrings} package. 
 
@@ -107,7 +128,7 @@ SeqBin <- trimEnds(as.matrix(SeqBin))
 ```
 
 
-## Phylogenetics
+## tree.vis 
 
 Starting Work
 

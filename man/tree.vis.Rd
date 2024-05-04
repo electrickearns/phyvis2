@@ -15,7 +15,7 @@ This function creates a simple phylogenetic tree, complete with branch length. I
 \examples{
 # require (ape)
 # require(ggtree)
-# tree.vis(MySeq)
+tree.vis(MySeq)
 
 }
 \keyword{-}

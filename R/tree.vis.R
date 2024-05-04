@@ -9,7 +9,7 @@
 #' @examples
 #' # require (ape)
 #' # require(ggtree)
-#' # tree.vis(MySeq)
+#' tree.vis(MySeq)
 #'
 
 tree.vis <- function(x) {
